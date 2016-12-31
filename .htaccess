@@ -1,0 +1,6 @@
+RewriteEngine on
+RewriteCond $1 !^(index\.php|images|themes|css|js|video_files|robots\.txt|favicon\.ico)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteRule ^(.*)/(.*)$|index.php$ index.php/?p=$1&c=$2 [L]
+RewriteRule ^(.*)$|index.php$ index.php?CATAPPA_URI_PARAMS=$1 [L]

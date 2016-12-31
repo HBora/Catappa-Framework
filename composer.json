@@ -1,0 +1,52 @@
+{
+    "name": "catappa/catappa",
+    "type": "library",
+    "description": "Catappa a PHP MVC & ORM Entity framework,  powerful REST And RESTful web applications and APIs",
+    "keywords": ["framework", "rest", "restful", "api", "router", "ORM","Entity Framework"],
+    "homepage": "http://catappa.com",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "H.Bora ABACI",
+            "email": "hboraabaci@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "symfony/http-foundation": "^3.1",
+        "psr/http-message": "^1.0",
+        "symfony/psr-http-message-bridge": "^1.0",
+        "zendframework/zend-diactoros": "^1.3",
+        "symfony/security-csrf": "^3.1",
+        "symfony/validator": "^3.2"
+
+    },
+    "autoload": {
+        "psr-4": {
+            "Catappa\\": ""
+        }
+
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Apps\\": "Apps/"
+        }
+    },
+    "scripts": {
+        "post-create-project-cmd": [
+            "Catappa\\Modules\\Composer\\Create::createAppSkeleton"
+        ]
+
+
+    },
+    "provide": {
+        "psr/http-message-implementation": "1.0"
+    },
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.0-dev"
+        }
+    }
+
+}
