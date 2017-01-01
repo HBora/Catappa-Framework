@@ -102,7 +102,8 @@ abstract class Model implements \JsonSerializable {
      * @return \Catappa\DataObject\Model
      */
     public static function find($pk, $join = true) {
-        return EntityManager::getInstance()->find(basename(get_called_class()), $pk, $join);
+        $class = basename(str_replace('\\', '/', get_called_class()));
+        return EntityManager::getInstance()->find($class, $pk, $join);
     }
 
     /**
@@ -111,7 +112,7 @@ abstract class Model implements \JsonSerializable {
      * @return \Catappa\DataObject\Model
      */
     public static function findBy($column, $value, $join = true) {
-        $entity_class = basename(get_called_class());
+        $entity_class = basename(str_replace('\\', '/', get_called_class()));
         $query = EntityManager::getInstance()->createQuery("SELECT * FROM $entity_class e WHERE e.$column =:value", $join);
         $query->bindValue(":value", $value);
         $query->execute();
@@ -130,7 +131,7 @@ abstract class Model implements \JsonSerializable {
     }
 
     public static function remove($pk) {
-        $object = EntityManager::getInstance()->find(basename(get_called_class()), $pk);
+        $object = EntityManager::getInstance()->find(str_replace('\\', '/', get_called_class()), $pk);
         if ($object) {
             $object->delete();
             return true;
@@ -195,7 +196,7 @@ abstract class Model implements \JsonSerializable {
      * @return \Catappa\DataObject\Query\Query;
      */
     public static function callQuery($queyName) {
-        $clazz_name = basename(get_called_class());
+        $clazz_name = basename(str_replace('\\', '/', get_called_class()));
         $query = EntityManager::getInstance()->namedQuery($clazz_name . "." . $queyName, $params);
         return $query;
     }
@@ -239,6 +240,7 @@ abstract class Model implements \JsonSerializable {
     }
 
     public function printJSON() {
+
         echo json_encode($this, JSON_PRETTY_PRINT);
     }
 

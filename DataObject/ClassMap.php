@@ -52,8 +52,9 @@ class ClassMap extends Singleton implements Serializable {
     }
 
     function load($clazz) {
-        $file_name = strtolower(basename($clazz));
+        $file_name = strtolower(basename(str_replace('\\', '/', $clazz)));
         $full_name = $this->path . DS . $this->map_dir . DS . $file_name . ".map";
+       
         if (file_exists($full_name)) {
             $x = unserialize(file_get_contents($full_name));
             
