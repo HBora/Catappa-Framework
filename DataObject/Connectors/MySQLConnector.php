@@ -91,7 +91,7 @@ class MySQLConnector extends PDO {
         try {
             $config = Config::getInstance();
             return parent::__construct(
-                            $config->dns, $config->user, $config->pass, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES " . $config->char_set, /* PDO::ATTR_PERSISTENT => TRUE, */ PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => false));
+                            $config->dns, $config->user, $config->password, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES " . $config->char_set, /* PDO::ATTR_PERSISTENT => TRUE, */ PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => false));
             $this->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
         } catch (PDOException $exception) {
             throw $exception;
