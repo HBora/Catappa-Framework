@@ -41,12 +41,6 @@
     },
     "provide": {
         "psr/http-message-implementation": "1.0"
-    },
-    "minimum-stability": "dev",
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.0.0"
-        }
     }
 
 }
