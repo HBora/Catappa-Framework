@@ -81,8 +81,6 @@ class ObjectSetter {
 
                 $this->unique[$this->ana_sinif_ismi][$veri[$this->ana_nesne_anahtari]] = $id;
             } else {
-
-
                 $yeni_ana_nesne = $this->islenmis_ana_nesneler[$this->ana_sinif_ismi][$this->unique[$this->ana_sinif_ismi][$veri[$this->ana_nesne_anahtari]]];
             }
             $this->yavrulat($veri, $yeni_ana_nesne, $this->ana_sinif_ismi);

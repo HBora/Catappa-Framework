@@ -1,7 +1,20 @@
 <?php
 
 namespace Catappa\Collections;
+/*
+ * This file is part of the Catappa package.
+ *
+ * (c) H.Bora ABACI <hboraabaci@gmail.com>
+ */
 
+/**
+ * @name PropertyChangeSupport
+ * @author H.Bora Abacı
+ * @copyright H.Bora Abacı
+ * @package Collection
+ * @version 2.0
+ *
+ */
 class Collection implements Countable, IteratorAggregate, ArrayAccess {
 
     protected $_valueType;

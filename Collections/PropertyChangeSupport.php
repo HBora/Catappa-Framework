@@ -24,7 +24,7 @@ class PropertyChangeSupport extends Singleton {
     static $propertyChanged;
 
     /**
-     * @return  PropertyChangeSupport
+     * @return  \Catappa\Collections\PropertyChangeSupport
      */
     public static function getInstance() {
         return parent::getInstance(__CLASS__);

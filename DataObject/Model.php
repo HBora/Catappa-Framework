@@ -53,14 +53,11 @@ abstract class Model implements \JsonSerializable {
             call_user_func(array($this, "set$name"), $value);
         if (method_exists($this, "set"))
             call_user_func_array(array($this, "set"), array($name, $value));
-        /*  $validates = $this->_columns[$name]["validate"];
-          foreach ($validates as $validate)
-          echo $validate; */
     }
 
     public final function __get($name) {
         if (method_exists($this, "get$name"))
-            return call_user_func(array($this, "get$name")); //call_user_method("get$name", $this,$value);
+            return call_user_func(array($this, "get$name"));
         elseif (method_exists($this, "get"))
             return call_user_func(array($this, "get"), $name);
     }
@@ -85,6 +82,9 @@ abstract class Model implements \JsonSerializable {
         return EntityManager::getInstance()->save($this);
     }
 
+    /**
+     * @return bool
+     */
     public function delete() {
         return EntityManager::getInstance()->delete($this);
     }
@@ -122,7 +122,7 @@ abstract class Model implements \JsonSerializable {
                 return $arr;
         return $arr[0];
     }
-    
+
     /**
      * @return \Catappa\DataObject\Model
      */
@@ -130,6 +130,11 @@ abstract class Model implements \JsonSerializable {
         return ObjectFactory::getNewInstance(get_called_class());
     }
 
+    /**
+     * 
+     * @param int $pk
+     * @return boolean
+     */
     public static function remove($pk) {
         $object = EntityManager::getInstance()->find(str_replace('\\', '/', get_called_class()), $pk);
         if ($object) {
@@ -141,7 +146,7 @@ abstract class Model implements \JsonSerializable {
 
     /**
      * @param string $query
-     * @param bool  $isjoin
+     * @param boolean  $isjoin
      * @return \Catappa\Collections\ArrayList
      */
     public static function getResultList($query, $isjoin = true) {
@@ -151,6 +156,11 @@ abstract class Model implements \JsonSerializable {
         return $query->getResultList();
     }
 
+    /**
+     * @param string $param
+     * @param bool $isjoin
+     * @return \Catappa\DataObject\Model
+     */
     public static function getSingle($param, $isjoin = true) {
         $query = EntityManager::getInstance()->createQuery($param, $isjoin);
         $query->execute();
@@ -158,6 +168,10 @@ abstract class Model implements \JsonSerializable {
         return $query->getSingle();
     }
 
+    /**
+     * @param string $param
+     * @return int
+     */
     public static function getCount($query = "") {
         $clazz = get_called_class();
         EntityManager::getInstance()->merge($clazz);
@@ -171,6 +185,10 @@ abstract class Model implements \JsonSerializable {
         return $query->getSingle();
     }
 
+    /**
+     * @param array $values
+     * @return \Catappa\DataObject\Model
+     */
     public function setAll(array $values) {
         foreach ($values as $key => $val) {
             $this->__set($key, $val);
@@ -219,6 +237,9 @@ abstract class Model implements \JsonSerializable {
         return (bool) (count($this->violation) == 0);
     }
 
+    /**
+     * @return array
+     */
     public function getViolation() {
         return $this->violation;
     }

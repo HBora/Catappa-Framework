@@ -34,13 +34,15 @@ class EQLGen {
     public function __construct(EntityManager $em) {
         $this->em = $em;
     }
+    /**
+     * @return type array
+     */
 
     public function getValues() {
         return $this->values;
     }
 
     /**
-     * 
      * @return \Catappa\DataObject\Query\Query;
      */
     public function createSTMT() {

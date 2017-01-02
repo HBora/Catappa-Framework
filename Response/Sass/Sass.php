@@ -66,9 +66,7 @@ class Sass extends Singleton {
                 $save_file_dir_name.= DS . $file_dir;
             }
         }
-
         preg_match_all('/@layout(\s*\(.*\))(\s*)/', $buff, $layouts);
-
         foreach ($layouts[1] as $nfile) {
             $nfile = str_replace(array("('", "')"), array("", ""), $nfile);
             $nfile = \Route::$app_path . DS . "Views" . DS . strtolower(str_replace(array("\\", "/"), array(DS, DS), $nfile));

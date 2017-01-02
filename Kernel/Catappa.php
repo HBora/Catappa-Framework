@@ -1,6 +1,7 @@
 <?php
 
 /*
+ * The Catappa Kernel
  * This file is part of the Catappa package.
  *
  * (c) H.Bora ABACI <hboraabaci@gmail.com>
@@ -183,7 +184,6 @@ class Catappa extends Singleton {
                 } else {
                     if ($this->symfonyRequest->getMethod() == "POST")
                         http_response_code(201);
-
                     return $method_result->printJSON();
                 }
             } else
@@ -260,7 +260,6 @@ class Catappa extends Singleton {
                 if (!$front_result)
                     return false;
             }
-//pre($result["midles"]);
             if (count($result["midles"]) > 0)
                 Route::mergeMidleMap($result["midles"]);
             $midle_result = Route::runMiddleWares();
@@ -269,10 +268,7 @@ class Catappa extends Singleton {
                 return false;
             elseif ($midle_result instanceof Catappa\Http\Controller || $midle_result instanceof Catappa\Response\View_Interface || $midle_result instanceof Symfony\Component\HttpFoundation\Response)
                 return $midle_result;
-
             $this->isMethodCall = true;
-
-
             return call_user_func_array(array($ctrl_obj, $ctrl_method_name), $send_method_params);
         }
     }
@@ -280,12 +276,8 @@ class Catappa extends Singleton {
     protected function parseAnnotation($ctrl_obj, $x = null) {
         $ref = new \ReflectionObject($ctrl_obj);
         $methods = $ref->getMethods();
-
         $ctrl_piece = Route::getClassUri(get_class($ctrl_obj));
-
         $search = strtolower($this->reParam($_GET["CTR_METHOD_PARAMS"]));
-
-
         $ctrl_pos = strpos($search, $ctrl_piece);
         if ($ctrl_pos !== false)
             $search = substr_replace($search, "/", $ctrl_pos, strlen($ctrl_piece));
@@ -294,9 +286,6 @@ class Catappa extends Singleton {
             $_GET["CTR_METHOD_PARAMS"] = substr_replace($_GET["CTR_METHOD_PARAMS"], "", 0, strlen($ctrl_piece));
 
         $search = $this->reParam($search);
-        /* if ($x != null)
-          $search = $x; */
-//pre("searh annatoed= ".$search);
 
         $method_name = null;
         $result = array();
@@ -352,7 +341,6 @@ class Catappa extends Singleton {
             }
 
             if (strtolower($search) == strtolower($lasturi_key)) {
-//pre($result[$lasturi_key]);
                 return $result[$lasturi_key];
                 continue;
             }

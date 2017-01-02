@@ -8,6 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+/**
+ * Edit for catappa Framework
+ * H.Bora ABACI
+ */
 
 namespace Catappa\Http;
 

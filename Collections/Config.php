@@ -6,6 +6,15 @@
  * (c) H.Bora ABACI <hboraabaci@gmail.com>
  */
 
+/**
+ * @name PropertyChangeSupport
+ * @author H.Bora Abacı
+ * @copyright H.Bora Abacı
+ * @package Collection
+ * @version 1.0
+ *
+ */
+
 namespace Catappa\Collections;
 
 use Catappa\Patterns\Singleton;

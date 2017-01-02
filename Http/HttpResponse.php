@@ -16,7 +16,7 @@ namespace Catappa\Http;
  */
 use Zend\Diactoros\Response;
 
-// $psrRequest is an instance of Psr\Http\Message\ServerRequestInterface
+/** $psrRequest is an instance of Psr\Http\Message\ServerRequestInterface*/
 
 
 class HttpResponse extends Response  {

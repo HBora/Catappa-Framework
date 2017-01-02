@@ -51,13 +51,10 @@ class EntityManager extends Singleton {
         $this->config = Config::getInstance();
 
         $this->map = ClassMap::getInstance();
-        $this->objectRegistry = new \SplObjectStorage(); //ObjectRegistry::getInstance();
+        $this->objectRegistry = new \SplObjectStorage();
         $this->querymanager = new QueryGenerator($this->map);
-        // $this->package = \Route::$app_package . "\\Models";
         $this->package = $this->config->model_package;
-
         $this->db = Connector::getInstance();
-
         $this->queryParser = new FQLToSQL($this->querymanager, $this->map);
         $this->setter = new ObjectSetter($this->map, $this->objectRegistry, $this->db);
         $this->record = new Record($this->objectRegistry, $this->map, $this->db);
@@ -71,6 +68,13 @@ class EntityManager extends Singleton {
         return Connector::getInstance();
     }
 
+    /**
+     * 
+     * @param string $entity
+     * @param int $id
+     * @param bool $join
+     * @return \Catappa\DataObject\Model
+     */
     function find($entity, $id, $join = true) {
         $this->map->merge($entity);
         $query = $this->querymanager->generate($join);
@@ -85,7 +89,8 @@ class EntityManager extends Singleton {
     }
 
     /**
-     * @return Query
+     * @param string $named
+     * @return \Catappa\DataObject\Query\Query
      */
     function namedQuery($named) {
         $ex = \explode(".", $named);
@@ -94,18 +99,24 @@ class EntityManager extends Singleton {
     }
 
     function merge($class_name) {
-
         $this->map->merge($class_name);
     }
 
+    /**
+     * @param string $entity
+     * @return bool 
+     */
     function save($entity) {
-
         $arr = explode("\\", get_class($entity));
         $n = \end($arr);
         $this->map->merge($n);
-        $this->record->save($entity);
+        return $this->record->save($entity);
     }
 
+    /**
+     * @param string $entity
+     * @return bool 
+     */
     function delete($entity, $subs = false) {
         $this->map->merge(get_class($entity));
         if ($subs == false)
@@ -121,7 +132,7 @@ class EntityManager extends Singleton {
      */
     function createQuery($q, $isjoin = true) {
         $query = $this->queryParser->parseQuery($q, false, $isjoin);
-        
+
         return $this->db->query($query, $this->setter, $this->queryParser->type);
     }
 
@@ -153,6 +164,10 @@ class EntityManager extends Singleton {
         return $this->map;
     }
 
+    /**
+     * @param string $entity
+     * @return \Catappa\DataObject\Model
+     */
     static function getSingle($query) {
         $db = Connector::getInstance();
         $query = $db->executeNativequery($query);
@@ -160,12 +175,22 @@ class EntityManager extends Singleton {
         return $query->fetchObject();
     }
 
+    /**
+     * 
+     * @param string query
+     * @return \Catappa\DataObject\Query\NativeQuery
+     */
     static function query($query) {
         $db = Connector::getInstance();
         $query = $db->executeNativequery($query);
         return $query->execute();
     }
 
+    /**
+     * 
+     * @param string $q
+     * @return Catappa\Collections\ArrayList
+     */
     static function getRResultList($q) {
         $query = EntityManager::getInstance()->createQuery($q);
         $query->execute();
@@ -177,18 +202,14 @@ class EntityManager extends Singleton {
     }
 
     /**
-     * 
-     * @return \Catappa\DataObject\EQLGen
-     * 
+     * @return \Catappa\DataObject\EQLGen* 
      */
     function getNewEQL() {
         return new \Catappa\DataObject\EQLGen($this);
     }
 
     /**
-     * 
      * @return \Catappa\DataObject\SQLGen
-     * 
      */
     function getNewSQL() {
         return new \Catappa\DataObject\SQLGen($this);

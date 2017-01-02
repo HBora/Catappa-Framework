@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Zend\Diactoros\ServerRequest;
 
-// $psrRequest is an instance of Psr\Http\Message\ServerRequestInterface
+/** $psrRequest is an instance of Psr\Http\Message\ServerRequestInterface*/
 
 
 class HttpRequest extends ServerRequest {

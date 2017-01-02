@@ -22,9 +22,6 @@ use Catappa\Http\HttpRequest;
 use Catappa\Http\HttpResponse;
 
 class Route {
-
-    private static $controller_uri = false;
-    private static $http_method = null;
     private static $nothing = array();
     private static $badHTTPMethod = array();
     private static $uri = array();
@@ -202,8 +199,6 @@ class Route {
                     }
                 }
 
-
-
                 $midle_result = call_user_func_array(array($midle_object, "next"), $send_method_params);
             }//Request Response PSR7
             if ($midle_result == false)
@@ -223,19 +218,15 @@ class Route {
 
     static function isApp($param) {
         $key = strtolower($param);
-
         if (!array_key_exists($key, Route::$app_packages))
             $key = "/";
         if (array_key_exists($key, Route::$app_packages)) {
             if (is_callable(Route::$app_packages[$key]["app"])) {
                 Route::$app_package = "Apps\\" . call_user_func_array(Route::$app_packages[$key]["app"], array());
-
-
                 Route::$app_path = BASE_DIR . DS . str_replace("\\", DS, Route::$app_package);
                 Route::$app_alias = ucfirst($key);
-
-                include Route::$app_path . DS . "Route.php";
-                include Route::$app_path . DS . "Config.php";
+                /*include Route::$app_path . DS . "Route.php";
+                include Route::$app_path . DS . "Config.php";*/
                 return ($key != "/") ? Catappa::getInstance()->dispatch() : $param;
             }
         }
