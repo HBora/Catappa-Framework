@@ -67,7 +67,7 @@ class Sass extends Singleton {
             }
         }
 
-        preg_match_all('@layout(\s*\(.*\))(\s*)/', $buff, $layouts);
+        preg_match_all('/@layout(\s*\(.*\))(\s*)/', $buff, $layouts);
 
         foreach ($layouts[1] as $nfile) {
             $nfile = str_replace(array("('", "')"), array("", ""), $nfile);
