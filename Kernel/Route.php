@@ -225,8 +225,8 @@ class Route {
                 Route::$app_package = "Apps\\" . call_user_func_array(Route::$app_packages[$key]["app"], array());
                 Route::$app_path = BASE_DIR . DS . str_replace("\\", DS, Route::$app_package);
                 Route::$app_alias = ucfirst($key);
-                /*include Route::$app_path . DS . "Route.php";
-                include Route::$app_path . DS . "Config.php";*/
+                include Route::$app_path . DS . "Route.php";
+                include Route::$app_path . DS . "Config.php";
                 return ($key != "/") ? Catappa::getInstance()->dispatch() : $param;
             }
         }
