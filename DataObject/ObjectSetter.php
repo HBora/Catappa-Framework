@@ -63,7 +63,6 @@ class ObjectSetter {
             $this->query = $query;
         $this->hazirlan();
         $this->islenmis_ana_nesneler[$this->ana_sinif_ismi] = array();
-        // $veri = $this->query->getAllResutlt();
         while ($veri = $this->query->nextResutlt()) {
           //pre($veri);
             $isRecord = true;
@@ -85,7 +84,6 @@ class ObjectSetter {
             }
             $this->yavrulat($veri, $yeni_ana_nesne, $this->ana_sinif_ismi);
         }
-        //pre($this->islenmis_ana_nesneler[$this->ana_sinif_ismi]);
         if ($isRecord)
             return new ArrayList($this->islenmis_ana_nesneler[$this->ana_sinif_ismi]);
         return NULL;
@@ -95,8 +93,6 @@ class ObjectSetter {
 
     function yavrulat($veri, &$obj) {
         $super_nesne_adi = get_class($obj);
-        //echo $super_nesne_adi;
-   
         if (isset($this->islenmis_haritalar[$super_nesne_adi]))
             return;
         $this->islenmis_haritalar[$super_nesne_adi] = $super_nesne_adi;
@@ -116,7 +112,6 @@ class ObjectSetter {
                 if ($yavru_harita_sinif["line"]!=-1)
                     $yavru_nesne_anahtari = "self" . "_" . $yavru_harita_sinif["line"] . "." . $pkId;
            
-
                 if (isset($this->islenmis_yavru_nesneler[$yavru_sinif_adi][$veri[$yavru_nesne_anahtari]]))
                     $yavru_nesne = $this->islenmis_yavru_nesneler[$yavru_sinif_adi][$veri[$yavru_nesne_anahtari]];
             
@@ -163,8 +158,7 @@ class ObjectSetter {
                 return;
        
         $columns = $this->map->getClassColumns($class_name);
-      
-
+     
         foreach ($columns as $column) {
             
             $nitelik = $column["property"];
@@ -179,5 +173,4 @@ class ObjectSetter {
         }
         
     }
-
 }
