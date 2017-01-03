@@ -37,7 +37,6 @@ Class ExceptionHandler {
 
     static function handleShutdown() {
         $error = error_get_last();
-
         if ($error !== NULL) {
             $code = (int) $error["type"];
 

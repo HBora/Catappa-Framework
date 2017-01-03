@@ -26,20 +26,22 @@ use Composer\Autoload\ClassLoader;
 use Catappa\Kernel\ExceptionHandler;
 
 error_reporting(E_ALL & ~(E_STRICT | E_NOTICE | E_WARNING));
-date_default_timezone_set('Europe/Istanbul');
-set_exception_handler(array("Catappa\Kernel\ExceptionHandler", "handleException"));
-//set_error_handler(array("Catappa\Kernel\ExceptionHandler", "handleError"),-1 & ~E_NOTICE & ~E_USER_NOTICE);
-
-define("vendor", "vendor");
-setlocale(LC_TIME, 'turkish');
 ini_set("display_errors", 1);
-
 require_once "Route.php";
 if (file_exists(BASE_DIR . DS . "Apps" . DS . "AppContext.php"))
     require_once BASE_DIR . DS . "Apps" . DS . "AppContext.php";
 if (file_exists(BASE_DIR . DS . "Apps" . DS . "AppConfig.php"))
     require_once BASE_DIR . DS . "Apps" . DS . "AppConfig.php";
-/* * Modifi $_GET */
+
+
+$cfg = Catappa\Collections\Config::getInstance();
+if ($cfg->error_handling == TRUE) {
+    set_exception_handler(array("Catappa\Kernel\ExceptionHandler", "handleException"));
+    register_shutdown_function(array("Catappa\Kernel\ExceptionHandler", "handleShutdown"));
+}
+
+
+/* * Modify $_GET */
 $par = explode("?", urldecode($_SERVER["REQUEST_URI"]));
 $par = explode("&", $par[1]);
 $count = count($par);
@@ -52,10 +54,6 @@ for ($i = 0; $i < $count; $i++) {
         $_GET[$xparam[0]] = $xparam[1];
 }
 
-function location($url) {
-    if ($url != $_SERVER["REDIRECT_URL"])
-        header("Location: $url");
-}
 
 function pre($param) {
     echo "<pre>";
@@ -116,9 +114,6 @@ class Catappa extends Singleton {
 
     function run() {
 
-        if (Catappa\Collections\Config::getInstance()->error_handling) {
-            register_shutdown_function(array("Catappa\Kernel\ExceptionHandler", "handleShutdown"));
-        }
         $this->symfonyRequest = SymfonyRequest::createFromGlobals();
         $this->symfonyResponse = SymfonyResponse::create();
         $first_key = $this->reParam($this->dispatch());
@@ -200,7 +195,6 @@ class Catappa extends Singleton {
                 parse_str(file_get_contents('php://input'), $_INPUT);
             $GLOBALS["PUT"] = $_INPUT;
         }
-
         $result = $this->parseAnnotation($ctrl_obj, $param);
 
         if ($result == false)
@@ -210,7 +204,6 @@ class Catappa extends Singleton {
         $use_http_method = $result["http"];
         $uri_key_values = $result["values"];
         $ctrl_http_params = $result["params"];
-//$_INPUT = array();
         $send_method_params = array();
 
         $m = new ReflectionMethod(get_class($ctrl_obj), $ctrl_method_name);
