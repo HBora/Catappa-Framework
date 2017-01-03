@@ -21,7 +21,7 @@ class Create {
         @mkdir($project_dir . DIRECTORY_SEPARATOR . "Controllers", 0777, true);
         @mkdir($project_dir . DIRECTORY_SEPARATOR . "Layouts", 0777, true);
         @mkdir($project_dir . DIRECTORY_SEPARATOR . "Views", 0777, true);
-        @mkdir($project_dir . DIRECTORY_SEPARATOR . "Middlewares", 0777, true);
+        @mkdir($project_dir . DIRECTORY_SEPARATOR . "MiddleWares", 0777, true);
         @mkdir($project_dir . DIRECTORY_SEPARATOR . "Models", 0777, true);
 
 
@@ -30,12 +30,12 @@ Route::add("/","Main");');
 
         file_put_contents($project_dir . DIRECTORY_SEPARATOR . "Config.php", '');
         $route = "";
-        $route = file_get_contents($app_dir . "AppRoute.php");
+        $route = file_get_contents($app_dir . "AppContext.php");
         $route = $route . 'Route::addApp("/", function () {
     return "' . $project_name . '";
 });
 ';
-        file_put_contents($app_dir . "AppRoute.php", $route);
+        file_put_contents($app_dir . "AppContext.php", $route);
 
         file_put_contents($project_dir . DIRECTORY_SEPARATOR . "Controllers" . DIRECTORY_SEPARATOR . "Main.php", '<?php
 namespace Apps\\' . $project_name . '\Controllers;

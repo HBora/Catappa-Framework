@@ -28,7 +28,6 @@ use Catappa\Kernel\ExceptionHandler;
 error_reporting(E_ALL & ~(E_STRICT | E_NOTICE | E_WARNING));
 date_default_timezone_set('Europe/Istanbul');
 set_exception_handler(array("Catappa\Kernel\ExceptionHandler", "handleException"));
-
 //set_error_handler(array("Catappa\Kernel\ExceptionHandler", "handleError"),-1 & ~E_NOTICE & ~E_USER_NOTICE);
 
 define("vendor", "vendor");
@@ -36,8 +35,8 @@ setlocale(LC_TIME, 'turkish');
 ini_set("display_errors", 1);
 
 require_once "Route.php";
-if (file_exists(BASE_DIR . DS . "Apps" . DS . "AppRoute.php"))
-    require_once BASE_DIR . DS . "Apps" . DS . "AppRoute.php";
+if (file_exists(BASE_DIR . DS . "Apps" . DS . "AppContext.php"))
+    require_once BASE_DIR . DS . "Apps" . DS . "AppContext.php";
 if (file_exists(BASE_DIR . DS . "Apps" . DS . "AppConfig.php"))
     require_once BASE_DIR . DS . "Apps" . DS . "AppConfig.php";
 /* * Modifi $_GET */
