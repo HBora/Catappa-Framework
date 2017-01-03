@@ -22,7 +22,7 @@ use Catappa\DataObject\Connectors\Connector;
 use Catappa\Collections\Config;
 use Catappa\DataObject;
 use Catappa\Exceptions\CompilerException;
-
+use Catappa\DataObject\FqlToSql;
 class ClassMapCompiler extends Singleton implements Serializable {
 
     private $array_map = array();
@@ -89,7 +89,7 @@ class ClassMapCompiler extends Singleton implements Serializable {
         $this->path = $this->config->model_path;
         $this->package = $this->config->model_package;
         $this->generator = new QueryGenerator($this);
-        $this->queryParser = new FQLToSQL($this->generator, $this);
+        $this->queryParser = new FqlToSql($this->generator, $this);
     }
 
     function run($class_name) {

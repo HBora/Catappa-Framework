@@ -24,7 +24,7 @@
  * @Edit H.Bora ABACI
  * 2016
  */
-require_once(dirname(__FILE__) . '/annotations/annotation_parser.php');
+require_once(dirname(__FILE__) . DS . 'Annotations' . DS . 'annotation_parser.php');
 
 use Catappa\Exceptions\AnnotationException;
 
