@@ -54,7 +54,6 @@ for ($i = 0; $i < $count; $i++) {
         $_GET[$xparam[0]] = $xparam[1];
 }
 
-
 function pre($param) {
     echo "<pre>";
     print_r($param);
@@ -267,6 +266,7 @@ class Catappa extends Singleton {
 
     protected function parseAnnotation($ctrl_obj, $x = null) {
         $ref = new \ReflectionObject($ctrl_obj);
+        $http_method = $this->symfonyRequest->getMethod();
         $methods = $ref->getMethods();
         $ctrl_piece = Route::getClassUri(get_class($ctrl_obj));
         $search = strtolower($this->reParam($_GET["CTR_METHOD_PARAMS"]));
@@ -333,8 +333,10 @@ class Catappa extends Singleton {
             }
 
             if (strtolower($search) == strtolower($lasturi_key)) {
+              if($result[$lasturi_key]["http"]==$http_method){
                 return $result[$lasturi_key];
                 continue;
+              }
             }
         }
 
