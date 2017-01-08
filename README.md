@@ -1,7 +1,7 @@
 # Catappa Framework
 
 
-Catappa a PHP MVC & ORM Entity framework,  powerful REST And RESTful web applications and APIs
+Catappa is a PHP MVC & ORM Entity framework, powerful REST And RESTful web applications and APIs
 
 ## Installation
 
@@ -12,11 +12,11 @@ $ composer require catappa/catappa 1.0.0.x-dev
 ```
 Or Download.
 
-This will install Catappa and all required dependencies. Catappa requires PHP 5.3.0 or newer.
+The Command  will install Catappa and all required dependencies. Catappa requires PHP 5.3.0 or newer.
 
 ## Learn More
 
-Learn more at these links:
+Learn more from these links:
 
 - [Website](http://www.catappaframework.com)
 - [Documentation](http://www.catappaframework.com)
