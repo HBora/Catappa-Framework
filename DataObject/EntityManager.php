@@ -65,7 +65,9 @@ class EntityManager extends Singleton {
      * @return \PDO
      */
     static function getPDOInstance() {
-        return Connector::getInstance();
+        $dbh = Connector::getInstance();
+        $dbh->setAttribute(\PDO::ATTR_FETCH_TABLE_NAMES, false);
+        return $dbh;
     }
 
     /**
@@ -128,17 +130,17 @@ class EntityManager extends Singleton {
     /**
      * @param string $q
      * @param bool $isjoin
-     * @return  \Catappa\DataObject\Query\Query;
+     * @return  \Catappa\DataObject\Query\Query
      */
     function createQuery($q, $isjoin = true) {
         $query = $this->queryParser->parseQuery($q, false, $isjoin);
-
+   
         return $this->db->query($query, $this->setter, $this->queryParser->type);
     }
 
     /**
      * @param String $query
-     * @return ra\orm\query\NativeQuery
+     * @return Catappa\DataObject\Query\Query
      */
     function nativeQuery($query) {
 

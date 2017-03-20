@@ -23,6 +23,7 @@ use Catappa\Collections\Config;
 use Catappa\DataObject;
 use Catappa\Exceptions\CompilerException;
 use Catappa\DataObject\FqlToSql;
+
 class ClassMapCompiler extends Singleton implements Serializable {
 
     private $array_map = array();
@@ -135,6 +136,7 @@ class ClassMapCompiler extends Singleton implements Serializable {
     private function saveTo() {
         $path = $this->config->model_path . DS . $this->config->model_map_dir_name;
         foreach ($this->array_map as $key => $value) {
+         
             $this->ownerMap[$key] = $value;
             foreach ($value[many] as $many) {
                 $this->ownerMap[$many["class"]] = $this->array_map [$many["class"]];
@@ -142,7 +144,8 @@ class ClassMapCompiler extends Singleton implements Serializable {
             foreach ($value[one] as $one) {
                 $this->ownerMap[$one["class"]] = $this->array_map [$one["class"]];
             }
-            $name = $value["table"];
+
+            $name = strtolower(basename(str_replace('\\', '/',$key)));
 
             $fp = fopen($path . DS . "$name.map", 'w');
             $this->ownerMap["QUERIES"] = array();
@@ -150,6 +153,7 @@ class ClassMapCompiler extends Singleton implements Serializable {
             fclose($fp);
             unset($this->ownerMap);
         }
+   
     }
 
     private function doClassMap($class_name) {
@@ -206,7 +210,7 @@ class ClassMapCompiler extends Singleton implements Serializable {
             $reflection = null;
         } catch (\Exception $e) {
 
-            throw new CompilerException($e->getMessage(), 5000, $reflection->getFileName(),$reflection->get);
+            throw new CompilerException($e->getMessage(), 5000, $reflection->getFileName(), $reflection->get);
         }
     }
 

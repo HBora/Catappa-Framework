@@ -126,6 +126,7 @@ class Catappa extends Singleton {
         $clazz = Route::hasRoutable($ctrl_key);
 
         $isCallMethod = $this->runResult($clazz, $ctrl_key);
+      
         if ($isCallMethod == false) {
             if ($this->isIncorrectHTTP)
                 return false;
@@ -166,6 +167,10 @@ class Catappa extends Singleton {
             http_response_code(204);
         } else if ($method_result instanceof Symfony\Component\HttpFoundation\Response) {
             $method_result->send();
+        } else if (is_array($method_result)||$method_result instanceof \stdClass) {
+            header('Content-Type: application/json; charset=utf-8');
+            echo json_encode($method_result);
+            die();
         } else if ($method_result instanceof Catappa\DataObject\Model || $method_result instanceof Catappa\Collections\ArrayList) {
             header('Content-Type: application/json; charset=utf-8');
             if ($method_result instanceof Catappa\DataObject\Model) {
@@ -333,10 +338,10 @@ class Catappa extends Singleton {
             }
 
             if (strtolower($search) == strtolower($lasturi_key)) {
-              if($result[$lasturi_key]["http"]==$http_method){
-                return $result[$lasturi_key];
-                continue;
-              }
+                if ($result[$lasturi_key]["http"] == $http_method) {
+                    return $result[$lasturi_key];
+                    continue;
+                }
             }
         }
 

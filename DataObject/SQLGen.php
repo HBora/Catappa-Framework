@@ -47,7 +47,7 @@ class SQLGen {
      * @return \PDOStatement
      */
     public function createSTMT() {
-       $this->em->getPDOInstance()->setAttribute(PDO::ATTR_FETCH_TABLE_NAMES, false);
+        $this->em->getPDOInstance()->setAttribute(PDO::ATTR_FETCH_TABLE_NAMES, false);
         if ($this->stmt == null)
             $this->stmt = $this->em->getPDOInstance()->prepare($this->queryString);
         foreach ($this->values as $obj) {
@@ -74,6 +74,20 @@ class SQLGen {
         $stmt = $pdo->query($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    public function query($sql,$params=array()) {
+        $pdo = $this->em->getPDOInstance();
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    }
+    
+        public function querySingle($sql,$params=array()) {
+        $pdo = $this->em->getPDOInstance();
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchObject();
     }
 
     private function parse($q) {
@@ -320,6 +334,8 @@ class SQLGen {
         $this->from = null;
         $this->entity = NULL;
         $this->stmt = null;
+        $this->cursor = 0;
+        $this->values = array();
         return $this;
     }
 

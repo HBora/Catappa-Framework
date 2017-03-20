@@ -1,11 +1,13 @@
 <?php
 
 namespace Catappa\DataObject;
+
 /*
  * This file is part of the Catappa package.
  *
  * (c) H.Bora ABACI <hboraabaci@gmail.com>
  */
+
 /**
  * @name ClassMap
  * @author H.Bora Abacı
@@ -28,7 +30,7 @@ class ClassMap extends Singleton implements Serializable {
         return parent::getInstance(__CLASS__);
     }
 
-    private $array_map = array();
+    private $array_map = array(), $loaded_files = array();
     private $super_class;
     private $package, $path, $map_dir;
     private $simpleClassName;
@@ -54,13 +56,14 @@ class ClassMap extends Singleton implements Serializable {
     function load($clazz) {
         $file_name = strtolower(basename(str_replace('\\', '/', $clazz)));
         $full_name = $this->path . DS . $this->map_dir . DS . $file_name . ".map";
-       
-        if (file_exists($full_name)) {
-            $x = unserialize(file_get_contents($full_name));
-            
-            $this->array_map = array_merge($this->array_map, $x);
-        } else
-            echo "<p>Map notfound $file_name </p>";
+
+        if (!array_key_exists($clazz, $this->loaded_files))
+            if (file_exists($full_name)) {
+                $x = unserialize(file_get_contents($full_name));
+                $this->loaded_files[$clazz] = $file_name;
+                $this->array_map = array_merge($this->array_map, $x);
+            } else
+                echo "<p>Map notfound $file_name </p>";
     }
 
     function setArrayMap(Array &$map) {
@@ -157,8 +160,8 @@ class ClassMap extends Singleton implements Serializable {
         $this->merge($class_name);
         return $this->array_map[$this->super_class]["SP"][$name];
     }
-    
-       function getClassValidations($class_name, $merge = false) {
+
+    function getClassValidations($class_name, $merge = false) {
         if ($merge == true)
             $class_name = $this->merge($class_name, $merge);
         return $this->array_map[$class_name]["validations"];
@@ -171,7 +174,6 @@ class ClassMap extends Singleton implements Serializable {
     public function unserialize($serialized) {
         $this->array_map = unserialize($serialized);
     }
-    
 
     function save() {
         $compile_path = $this->path . DS . "compiled";

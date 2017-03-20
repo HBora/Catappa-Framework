@@ -113,6 +113,7 @@ abstract class Model implements \JsonSerializable {
      */
     public static function findBy($column, $value, $join = true) {
         $entity_class = basename(str_replace('\\', '/', get_called_class()));
+
         $query = EntityManager::getInstance()->createQuery("SELECT * FROM $entity_class e WHERE e.$column =:value", $join);
         $query->bindValue(":value", $value);
         $query->execute();
@@ -122,12 +123,13 @@ abstract class Model implements \JsonSerializable {
                 return $arr;
         return $arr[0];
     }
+    
 
     /**
      * @return \Catappa\DataObject\Model
      */
-    public static function create() {
-        return ObjectFactory::getNewInstance(get_called_class());
+    public static function create($arr=NULL) {
+        return ObjectFactory::getNewInstance(get_called_class(),$arr);
     }
 
     /**
@@ -201,7 +203,6 @@ abstract class Model implements \JsonSerializable {
      * @param Bool $q
      * @param String $isjoin
      * @return \Catappa\DataObject\Query\Query;
-     * 
      */
     public static function query($q, $isjoin = true) {
         $query = EntityManager::getInstance()->createQuery($q, $isjoin);
@@ -273,6 +274,10 @@ abstract class Model implements \JsonSerializable {
             $arr[$property_name] = $this->get($property_name);
         }
         return $arr;
+    }
+    
+       public function toArray() {
+           return $this->jsonSerialize();
     }
 
 }

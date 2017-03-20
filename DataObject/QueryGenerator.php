@@ -143,8 +143,8 @@ class Record {
     public function save($entity) {
 
         $hash = spl_object_hash($entity);
-        if (isset($this->lasted[$hash]))
-            return;
+        /* if (isset($this->lasted[$hash]))
+          return; */
 
         $this->lasted[$hash] = $hash;
         $class_name = get_class($entity);
@@ -154,6 +154,7 @@ class Record {
             if ($this->changeSupport->isChangedObject($entity))
                 $this->update($entity);
         } else
+        //if (isset($this->lasted[$hash]))
             $this->insert($entity);
 
         foreach ($fk as $key => $maps)
@@ -194,8 +195,7 @@ class Record {
             $property = $val["property"];
             $column_name = $val["name"];
             $column_type = $val["type"];
-            $data = $entity->$property;
-            {
+            $data = $entity->$property; {
                 if (!is_null($data) && !is_array($data) && !is_object($data)) {
                     $str.= ( $i == 0) ? $column_name : "," . $column_name;
                     $values.= ( $i == 0) ? "?" : ",?";
@@ -216,6 +216,7 @@ class Record {
         }
         if ($i > 0) {
             try {
+              
                 $this->db->executeNativequery($insert)->execute($arrvalues);
                 $entity->__dbset($prkey, $this->db->getinsertId());
                 $this->registry->attach($entity);
@@ -261,9 +262,9 @@ class Record {
         if ($i > 0) {
             $where = " WHERE $table_name.$pkId = " . $entity->$pkId;
             $update = substr($str, 0, strlen($str) - 1) . $values . $where . "; ";
+           
             try {
                 $this->db->executeNativequery($update)->execute($arrvalues);
-                //echo $update;
             } catch (PDOException $e) {
                 throw $e;
             }
