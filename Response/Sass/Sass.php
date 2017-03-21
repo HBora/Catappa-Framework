@@ -28,7 +28,7 @@ class Sass extends Singleton {
         '/@include(\s*\(.*\))(\s*)/',
         '/@layout(\s*\(.*\))(\s*)/',
         '/@{+(.*?)}/',
-        '/@(.*?)(\s*\(.*\))(\s*)/',
+            /* '/@(.*?)(\s*\(.*\))(\s*)/', */
     );
     private $replace_paterns = array('<?php echo $$1;?>',
         '$1<?php $2$3: ?>',
@@ -37,7 +37,7 @@ class Sass extends Singleton {
         '<?php include $1;?>$2',
         '<?php include $1;?>$2',
         '<?php echo ${1};?>',
-        '<?php $this->call("$1", array$2); ?>$3'
+            /* '<?php $this->call("$1", array$2); ?>$3' */
     );
 
     public static function getInstance() {
@@ -56,6 +56,7 @@ class Sass extends Singleton {
         $this->rendered[] = $file;
         $buff = "";
         $file_dir = basename(dirname($file));
+
         $file_name = basename($file);
         if (file_exists($file)) {
             $buff = file_get_contents($file);
@@ -69,7 +70,8 @@ class Sass extends Singleton {
         preg_match_all('/@layout(\s*\(.*\))(\s*)/', $buff, $layouts);
         foreach ($layouts[1] as $nfile) {
             $nfile = str_replace(array("('", "')"), array("", ""), $nfile);
-            $nfile = \Route::$app_path . DS . "Views" . DS . strtolower(str_replace(array("\\", "/"), array(DS, DS), $nfile));
+            //$nfile = \Route::$app_path . DS . "Views" . DS . strtolower(str_replace(array("\\", "/"), array(DS, DS), $nfile));
+            $nfile = dirname($file) . DS . $nfile;
             $this->render($nfile);
         }
 
