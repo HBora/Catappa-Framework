@@ -36,8 +36,20 @@ class Controller implements IController {
     }
 
     public function query($sql, $params = array(), $all = true) {
+        $this->dbh->setAttribute(\PDO::ATTR_FETCH_TABLE_NAMES, false);
         $stmt = $this->dbh->prepare($sql);
-        $stmt->execute($params);
+        foreach ($params as $key => $var){
+           // pre($key."=".$var);
+            if (is_string($var))
+                $stmt->bindValue($key,$var, PDO::PARAM_STR);
+            else if (is_int($var))
+                $stmt->bindValue($key,$var, PDO::PARAM_INT);
+            else if (is_bool($var))
+                $stmt->bindValue($key,$var, PDO::PARAM_BOOL);
+            else
+                $stmt->bindValue($key,$var, PDO::PARAM_STR);
+        }
+        $stmt->execute();
         if ($all)
             return $stmt->fetchAll(PDO::FETCH_OBJ);
         return $stmt->fetchObject();
