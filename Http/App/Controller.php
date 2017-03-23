@@ -38,8 +38,12 @@ class Controller implements IController {
     public function query($sql, $params = array(), $all = true) {
         $this->dbh->setAttribute(\PDO::ATTR_FETCH_TABLE_NAMES, false);
         $stmt = $this->dbh->prepare($sql);
+        
         foreach ($params as $key => $var){
-           // pre($key."=".$var);
+          if(is_int($key)){
+                $stmt->execute($params );
+                break;
+          }
             if (is_string($var))
                 $stmt->bindValue($key,$var, PDO::PARAM_STR);
             else if (is_int($var))
@@ -77,3 +81,4 @@ class Controller implements IController {
     }
 
 }
+

@@ -126,7 +126,7 @@ class Catappa extends Singleton {
         $clazz = Route::hasRoutable($ctrl_key);
 
         $isCallMethod = $this->runResult($clazz, $ctrl_key);
-      
+
         if ($isCallMethod == false) {
             if ($this->isIncorrectHTTP)
                 return false;
@@ -167,7 +167,7 @@ class Catappa extends Singleton {
             http_response_code(204);
         } else if ($method_result instanceof Symfony\Component\HttpFoundation\Response) {
             $method_result->send();
-        } else if (is_array($method_result)||$method_result instanceof \stdClass) {
+        } else if (is_array($method_result) || $method_result instanceof \stdClass) {
             header('Content-Type: application/json; charset=utf-8');
             echo json_encode($method_result);
             die();
@@ -258,6 +258,7 @@ class Catappa extends Singleton {
             }
             if (count($result["midles"]) > 0)
                 Route::mergeMidleMap($result["midles"]);
+
             $midle_result = Route::runMiddleWares();
 
             if ($midle_result == false)

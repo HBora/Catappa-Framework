@@ -153,7 +153,6 @@ class Route {
         if (array_key_exists($param, Route::$routes)) {
             $route = Route::$routes[$param];
 
-
             Route::$currentParam = $param;
             if ($route["class"] instanceof Closure)
                 return call_user_func_array($route["class"], array()); //Request Response PSR7
@@ -161,6 +160,7 @@ class Route {
                 //pre( BASE_DIR .DS.str_replace("\\",DS , $route["class"].".php"));
                 include BASE_DIR . DS . str_replace("\\", DS, $route["class"] . ".php");
                 Route::$ctrl_alias = $route["alias"];
+
                 return ObjectFactory::getNewInstance($route["class"]);
             }
         }
@@ -178,9 +178,12 @@ class Route {
 
 
         foreach ($midles as $midle) {
-
             $send_method_params = array();
-            $midle_object = ObjectFactory::getNewInstance($midle);
+            if (class_exists($midle))
+                $midle_object = ObjectFactory::getNewInstance($midle);
+            else if (class_exists(Route::$app_package . "\\MiddleWares\\" . $midle))
+                $midle_object = ObjectFactory::getNewInstance(Route::$app_package . "\\MiddleWares\\" . $midle);
+
             if ($midle_object instanceof MiddleWare) {
                 $ref_method = new ReflectionMethod(get_class($midle_object), "next");
                 $ref_params = $ref_method->getParameters();
@@ -214,10 +217,13 @@ class Route {
     }
 
     static function mergeMidleMap($arr = array()) {
+        if (!is_array(Route::$midleMap[Route::$currentParam]))
+            Route::$midleMap[Route::$currentParam] = array();
         Route::$midleMap[Route::$currentParam] = array_merge(Route::$midleMap[Route::$currentParam], $arr);
     }
 
     static function isApp($param) {
+        ;
         $key = strtolower($param);
         if (!array_key_exists($key, Route::$app_packages))
             $key = "/";
