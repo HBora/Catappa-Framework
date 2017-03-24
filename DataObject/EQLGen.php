@@ -34,10 +34,10 @@ class EQLGen {
     public function __construct(EntityManager $em) {
         $this->em = $em;
     }
+
     /**
      * @return type array
      */
-
     public function getValues() {
         return $this->values;
     }
@@ -46,7 +46,8 @@ class EQLGen {
      * @return \Catappa\DataObject\Query\Query;
      */
     public function createSTMT() {
-        echo $this->queryString;
+        //
+        //echo $this->queryString;
         if ($this->stmt == null)
             $this->stmt = $this->em->createQuery($this->queryString);
         foreach ($this->values as $obj) {
@@ -57,7 +58,7 @@ class EQLGen {
 
     /**
      * @param String $is_join
-     * @return Array
+     * @return \Catappa\Collections\ArrayList
      */
     public function getResultList($is_join = true) {
         $stmt = $this->createSTMT();

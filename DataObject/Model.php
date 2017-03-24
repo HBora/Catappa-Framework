@@ -123,13 +123,23 @@ abstract class Model implements \JsonSerializable {
                 return $arr;
         return $arr[0];
     }
-    
+
+    /**
+     * @param String $eql
+     * @return \Catappa\DataObject\EQLGen
+     */
+    public static function where($where) {
+        $entity_class = basename(str_replace('\\', '/', get_called_class()));
+        $eql = EntityManager::getInstance()->getNewEQL();
+        
+        return $eql->select("*")->from($entity_class)->where($where);
+    }
 
     /**
      * @return \Catappa\DataObject\Model
      */
-    public static function create($arr=NULL) {
-        return ObjectFactory::getNewInstance(get_called_class(),$arr);
+    public static function create($arr = NULL) {
+        return ObjectFactory::getNewInstance(get_called_class(), $arr);
     }
 
     /**
@@ -275,9 +285,9 @@ abstract class Model implements \JsonSerializable {
         }
         return $arr;
     }
-    
-       public function toArray() {
-           return $this->jsonSerialize();
+
+    public function toArray() {
+        return $this->jsonSerialize();
     }
 
 }

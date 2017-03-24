@@ -25,6 +25,7 @@ use Catappa\DataObject\FqlToSql;
 use Catappa\DataObject\ObjectSetter;
 use Catappa\DataObject\Record;
 use Catappa\DataObject\SQLGen;
+use \PDO;
 
 class EntityManager extends Singleton {
 
@@ -134,17 +135,7 @@ class EntityManager extends Singleton {
      */
     function createQuery($q, $isjoin = true) {
         $query = $this->queryParser->parseQuery($q, false, $isjoin);
-   
         return $this->db->query($query, $this->setter, $this->queryParser->type);
-    }
-
-    /**
-     * @param String $query
-     * @return Catappa\DataObject\Query\Query
-     */
-    function nativeQuery($query) {
-
-        return $this->db->executeNativequery($query);
     }
 
     function beginTransaction() {
@@ -167,22 +158,11 @@ class EntityManager extends Singleton {
     }
 
     /**
-     * @param string $entity
-     * @return \Catappa\DataObject\Model
-     */
-    static function getSingle($query) {
-        $db = Connector::getInstance();
-        $query = $db->executeNativequery($query);
-        $query->execute();
-        return $query->fetchObject();
-    }
-
-    /**
      * 
      * @param string query
      * @return \Catappa\DataObject\Query\NativeQuery
      */
-    static function query($query) {
+    static function nativeQuery($query) {
         $db = Connector::getInstance();
         $query = $db->executeNativequery($query);
         return $query->execute();
@@ -190,13 +170,27 @@ class EntityManager extends Singleton {
 
     /**
      * 
-     * @param string $q
-     * @return Catappa\Collections\ArrayList
+     * @param string $eql
+     * @return \Catappa\Collections\ArrayList
      */
-    static function getRResultList($q) {
-        $query = EntityManager::getInstance()->createQuery($q);
-        $query->execute();
-        return $query->resultList();
+    public static function query($eql, $params = array(), $all = true) {
+        $stmt = EntityManager::getInstance()->createQuery($eql);
+        foreach ($params as $key => $var) {
+            if (is_int($key)) {
+                $stmt->execute($params);
+                break;
+            }
+            if (is_string($var))
+                $stmt->bindValue($key, $var, PDO::PARAM_STR);
+            else if (is_int($var))
+                $stmt->bindValue($key, $var, PDO::PARAM_INT);
+            else if (is_bool($var))
+                $stmt->bindValue($key, $var, PDO::PARAM_BOOL);
+            else
+                $stmt->bindValue($key, $var, PDO::PARAM_STR);
+        }
+        $stmt->execute();
+        return $stmt->getResultList();
     }
 
     static function quote($param) {
@@ -204,7 +198,7 @@ class EntityManager extends Singleton {
     }
 
     /**
-     * @return \Catappa\DataObject\EQLGen* 
+     * @return \Catappa\DataObject\EQLGen
      */
     function getNewEQL() {
         return new \Catappa\DataObject\EQLGen($this);
